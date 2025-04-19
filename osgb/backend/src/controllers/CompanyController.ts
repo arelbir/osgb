@@ -179,14 +179,26 @@ export class CompanyController {
   static async getCompanyUnits(req: Request, res: Response): Promise<void> {
     try {
       const { companyId } = req.params;
-      
       const companyUnitRepository = AppDataSource.getRepository(CompanyUnit);
       const units = await companyUnitRepository.find({
         where: { company_id: Number(companyId) },
         relations: ['company']
       });
-      
-      res.json(units);
+      // Sadece gerekli alanları döndür
+      const result = units.map(unit => ({
+        id: unit.id,
+        name: unit.name,
+        address: unit.address,
+        phone: unit.phone,
+        company_id: unit.company_id,
+        created_at: unit.created_at,
+        updated_at: unit.updated_at,
+        company: unit.company ? {
+          id: unit.company.id,
+          name: unit.company.name
+        } : null
+      }));
+      res.json(result);
       return;
     } catch (error) {
       console.error('Get company units error:', error);

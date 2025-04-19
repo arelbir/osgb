@@ -17,6 +17,85 @@ router.use(authMiddleware);
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Company:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         tax_number:
+ *           type: string
+ *         address:
+ *           type: string
+ *         phone:
+ *           type: string
+ *         email:
+ *           type: string
+ *         contact_person:
+ *           type: string
+ *         is_active:
+ *           type: boolean
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *       example:
+ *         id: 1
+ *         name: "Arel OSGB"
+ *         tax_number: "1234567890"
+ *         address: "İstanbul, Türkiye"
+ *         phone: "+90 212 123 45 67"
+ *         email: "info@arel.com"
+ *         contact_person: "Mehmet Yılmaz"
+ *         is_active: true
+ *         created_at: "2025-04-19T18:00:00.000Z"
+ *         updated_at: "2025-04-19T18:00:00.000Z"
+ *     CompanyUnit:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         address:
+ *           type: string
+ *         phone:
+ *           type: string
+ *         company_id:
+ *           type: integer
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *         company:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: integer
+ *             name:
+ *               type: string
+ *       example:
+ *         id: 1
+ *         name: "Merkez Şube"
+ *         address: "İstanbul, Türkiye"
+ *         phone: "+90 212 555 55 55"
+ *         company_id: 1
+ *         created_at: "2025-04-19T18:00:00.000Z"
+ *         updated_at: "2025-04-19T18:00:00.000Z"
+ *         company:
+ *           id: 1
+ *           name: "Arel OSGB"
+ */
+
+/**
+ * @swagger
  * /companies:
  *   get:
  *     summary: Tüm firmaları getir
@@ -26,6 +105,23 @@ router.use(authMiddleware);
  *     responses:
  *       200:
  *         description: Firma listesi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Company'
+ *             example:
+ *               - id: 1
+ *                 name: "Arel OSGB"
+ *                 tax_number: "1234567890"
+ *                 address: "İstanbul, Türkiye"
+ *                 phone: "+90 212 123 45 67"
+ *                 email: "info@arel.com"
+ *                 contact_person: "Mehmet Yılmaz"
+ *                 is_active: true
+ *                 created_at: "2025-04-19T18:00:00.000Z"
+ *                 updated_at: "2025-04-19T18:00:00.000Z"
  */
 router.get('/', asyncHandler(CompanyController.getAll));
 
@@ -47,6 +143,21 @@ router.get('/', asyncHandler(CompanyController.getAll));
  *     responses:
  *       200:
  *         description: Firma detayı
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Company'
+ *             example:
+ *               id: 1
+ *               name: "Arel OSGB"
+ *               tax_number: "1234567890"
+ *               address: "İstanbul, Türkiye"
+ *               phone: "+90 212 123 45 67"
+ *               email: "info@arel.com"
+ *               contact_person: "Mehmet Yılmaz"
+ *               is_active: true
+ *               created_at: "2025-04-19T18:00:00.000Z"
+ *               updated_at: "2025-04-19T18:00:00.000Z"
  */
 router.get('/:id', asyncHandler(CompanyController.getById));
 
@@ -63,10 +174,33 @@ router.get('/:id', asyncHandler(CompanyController.getById));
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/Company'
+ *           example:
+ *             name: "Arel OSGB"
+ *             tax_number: "1234567890"
+ *             address: "İstanbul, Türkiye"
+ *             phone: "+90 212 123 45 67"
+ *             email: "info@arel.com"
+ *             contact_person: "Mehmet Yılmaz"
+ *             is_active: true
  *     responses:
  *       201:
  *         description: Firma oluşturuldu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Company'
+ *             example:
+ *               id: 1
+ *               name: "Arel OSGB"
+ *               tax_number: "1234567890"
+ *               address: "İstanbul, Türkiye"
+ *               phone: "+90 212 123 45 67"
+ *               email: "info@arel.com"
+ *               contact_person: "Mehmet Yılmaz"
+ *               is_active: true
+ *               created_at: "2025-04-19T18:00:00.000Z"
+ *               updated_at: "2025-04-19T18:00:00.000Z"
  */
 router.post('/', asyncHandler(CompanyController.create));
 
@@ -90,10 +224,33 @@ router.post('/', asyncHandler(CompanyController.create));
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/Company'
+ *           example:
+ *             name: "Arel OSGB"
+ *             tax_number: "1234567890"
+ *             address: "İstanbul, Türkiye"
+ *             phone: "+90 212 123 45 67"
+ *             email: "info@arel.com"
+ *             contact_person: "Mehmet Yılmaz"
+ *             is_active: true
  *     responses:
  *       200:
  *         description: Firma güncellendi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Company'
+ *             example:
+ *               id: 1
+ *               name: "Arel OSGB"
+ *               tax_number: "1234567890"
+ *               address: "İstanbul, Türkiye"
+ *               phone: "+90 212 123 45 67"
+ *               email: "info@arel.com"
+ *               contact_person: "Mehmet Yılmaz"
+ *               is_active: true
+ *               created_at: "2025-04-19T18:00:00.000Z"
+ *               updated_at: "2025-04-19T18:00:00.000Z"
  */
 router.put('/:id', asyncHandler(CompanyController.update));
 
@@ -136,6 +293,23 @@ router.delete('/:id', checkRole(['admin']), asyncHandler(CompanyController.delet
  *     responses:
  *       200:
  *         description: Firma birimleri listesi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/CompanyUnit'
+ *             example:
+ *               - id: 1
+ *                 name: "Merkez Şube"
+ *                 address: "İstanbul, Türkiye"
+ *                 phone: "+90 212 555 55 55"
+ *                 company_id: 1
+ *                 created_at: "2025-04-19T18:00:00.000Z"
+ *                 updated_at: "2025-04-19T18:00:00.000Z"
+ *                 company:
+ *                   id: 1
+ *                   name: "Arel OSGB"
  */
 router.get('/:companyId/units', asyncHandler(CompanyController.getCompanyUnits));
 
@@ -159,10 +333,26 @@ router.get('/:companyId/units', asyncHandler(CompanyController.getCompanyUnits))
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/CompanyUnit'
+ *           example:
+ *             name: "Merkez Şube"
+ *             address: "İstanbul, Türkiye"
+ *             phone: "+90 212 555 55 55"
  *     responses:
  *       201:
  *         description: Birim oluşturuldu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CompanyUnit'
+ *             example:
+ *               id: 1
+ *               name: "Merkez Şube"
+ *               address: "İstanbul, Türkiye"
+ *               phone: "+90 212 555 55 55"
+ *               company_id: 1
+ *               created_at: "2025-04-19T18:00:00.000Z"
+ *               updated_at: "2025-04-19T18:00:00.000Z"
  */
 router.post('/:companyId/units', asyncHandler(CompanyController.createCompanyUnit));
 

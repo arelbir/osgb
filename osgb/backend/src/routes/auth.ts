@@ -33,11 +33,46 @@ const router = Router();
  *                 type: string
  *               email:
  *                 type: string
+ *           example:
+ *             username: "admin"
+ *             password: "Admin123!"
+ *             full_name: "Admin Kullanıcı"
+ *             email: "admin@arel.com"
  *     responses:
  *       201:
  *         description: Admin kullanıcı oluşturuldu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 username:
+ *                   type: string
+ *                 full_name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *             example:
+ *               id: 1
+ *               username: "admin"
+ *               full_name: "Admin Kullanıcı"
+ *               email: "admin@arel.com"
+ *               role: "admin"
  *       400:
  *         description: Eksik bilgi veya zaten admin var
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *             example:
+ *               message: "Sistemde zaten kullanıcı var. Bu endpoint sadece ilk kullanıcı için kullanılabilir."
  */
 router.post('/init-admin', asyncHandler(AuthController.initAdmin));
 
@@ -58,11 +93,59 @@ router.post('/init-admin', asyncHandler(AuthController.initAdmin));
  *                 type: string
  *               password:
  *                 type: string
+ *           example:
+ *             username: "admin"
+ *             password: "Admin123!"
  *     responses:
  *       200:
- *         description: Başarılı giriş
+ *         description: Giriş başarılı, token döner
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     username:
+ *                       type: string
+ *                     full_name:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                 token:
+ *                   type: string
+ *             example:
+ *               user:
+ *                 id: 1
+ *                 username: "admin"
+ *                 full_name: "Admin Kullanıcı"
+ *                 role: "admin"
+ *               token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       400:
+ *         description: Kullanıcı adı veya şifre eksik
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *             example:
+ *               message: "Username and password are required"
  *       401:
- *         description: Hatalı kimlik bilgisi
+ *         description: Hatalı kullanıcı adı veya şifre
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *             example:
+ *               message: "Invalid credentials"
  */
 router.post('/login', asyncHandler(AuthController.login));
 

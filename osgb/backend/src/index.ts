@@ -8,6 +8,16 @@ import companyRoutes from './routes/companies';
 import protocolRoutes from './routes/protocols';
 import labResultRoutes from './routes/lab-results';
 import paymentRoutes from './routes/payments';
+import paymentTypeRoutes from './routes/payment-types';
+import examinationTypeRoutes from './routes/examination-types';
+import serviceGroupRoutes from './routes/service-groups';
+import serviceRoutes from './routes/services';
+import sampleStatusRoutes from './routes/sample-statuses';
+import sampleRejectionReasonRoutes from './routes/sample-rejection-reasons';
+import externalLabRoutes from './routes/external-labs';
+import externalLabSubmissionRoutes from './routes/external-lab-submissions';
+import cashRegisterRoutes from './routes/cash-registers';
+import webResultUserRoutes from './routes/web-result-users';
 import { setupSwagger } from './swagger';
 
 // Load environment variables
@@ -31,6 +41,16 @@ app.use('/api/companies', companyRoutes);
 app.use('/api/protocols', protocolRoutes);
 app.use('/api/lab-results', labResultRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/payment-types', paymentTypeRoutes);
+app.use('/api/examination-types', examinationTypeRoutes);
+app.use('/api/service-groups', serviceGroupRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/sample-statuses', sampleStatusRoutes);
+app.use('/api/sample-rejection-reasons', sampleRejectionReasonRoutes);
+app.use('/api/external-labs', externalLabRoutes);
+app.use('/api/external-lab-submissions', externalLabSubmissionRoutes);
+app.use('/api/cash-registers', cashRegisterRoutes);
+app.use('/api/web-result-users', webResultUserRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
