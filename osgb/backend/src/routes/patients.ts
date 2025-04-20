@@ -133,6 +133,56 @@ router.get('/', asyncHandler(PatientController.getAll));
 
 /**
  * @swagger
+ * /patients/exists:
+ *   get:
+ *     summary: TC kimlik numarasına göre hasta var mı?
+ *     tags: [Patients]
+ *     parameters:
+ *       - in: query
+ *         name: tc_identity_number
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: TC kimlik numarası
+ *     responses:
+ *       200:
+ *         description: Hasta var mı?
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exists:
+ *                   type: boolean
+ *                   description: Hasta sistemde var mı?
+ *                 id:
+ *                   type: integer
+ *                   description: Hasta ID (varsa)
+ */
+router.get('/exists', asyncHandler(async (req, res, next) => {
+  const tc = req.query.tc_identity_number as string;
+  if (!tc) {
+    res.status(400).json({ error: 'tc_identity_number gerekli' });
+    return;
+  }
+  const cleanTc = tc.trim();
+  if (!/^[0-9]{11}$/.test(cleanTc)) {
+    res.status(400).json({ error: 'Geçersiz TC kimlik numarası formatı' });
+    return;
+  }
+  const patient = await req.app.get('dataSource').getRepository('Patient').findOne({
+    select: ['id'],
+    where: { tc_identity_number: cleanTc }
+  });
+  if (patient && patient.id != null) {
+    res.json({ exists: true, id: patient.id });
+  } else {
+    res.json({ exists: false });
+  }
+}));
+
+/**
+ * @swagger
  * /patients/{id}:
  *   get:
  *     summary: Hasta detayı getir
@@ -175,7 +225,15 @@ router.get('/', asyncHandler(PatientController.getAll));
  *               created_at: "2025-04-19T18:00:00.000Z"
  *               updated_at: "2025-04-19T18:00:00.000Z"
  */
-router.get('/:id', asyncHandler(PatientController.getById));
+router.get('/:id', asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    res.status(400).json({ error: 'Geçersiz hasta ID' });
+    return;
+  }
+  // Controller fonksiyonunu çağır
+  await PatientController.getById(req, res);
+}));
 
 /**
  * @swagger
@@ -209,34 +267,6 @@ router.get('/:id', asyncHandler(PatientController.getById));
  *             photo_url: "https://example.com/photo.jpg"
  *             company_id: 1
  *             company_unit_id: 2
- *     responses:
- *       201:
- *         description: Hasta oluşturuldu
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Patient'
- *             example:
- *               id: 1
- *               tc_identity_number: "12345678901"
- *               registration_number: "REG-001"
- *               passport_number: "P1234567"
- *               first_name: "Ayşe"
- *               last_name: "Yılmaz"
- *               birth_date: "1990-01-01"
- *               gender: "Kadın"
- *               mother_name: "Fatma"
- *               father_name: "Mehmet"
- *               mobile_phone: "+90 555 111 22 33"
- *               home_phone: "+90 212 333 44 55"
- *               email: "ayse.yilmaz@example.com"
- *               address: "İstanbul, Türkiye"
- *               notes: "Alerji yok"
- *               photo_url: "https://example.com/photo.jpg"
- *               company_id: 1
- *               company_unit_id: 2
- *               created_at: "2025-04-19T18:00:00.000Z"
- *               updated_at: "2025-04-19T18:00:00.000Z"
  */
 router.post('/', asyncHandler(PatientController.create));
 

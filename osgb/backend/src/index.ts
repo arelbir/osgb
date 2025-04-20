@@ -66,7 +66,7 @@ app.get('/health', (req, res) => {
 AppDataSource.initialize()
   .then(() => {
     console.log('Database connection established');
-    
+    app.set('dataSource', AppDataSource); // AppDataSource'u Express app'e ekle
     // Start server
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
