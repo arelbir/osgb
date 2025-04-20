@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import AppDataSource from '../../ormconfig';
+import { AppDataSource } from '../ormconfig';
 import { PaymentType } from '../models/PaymentType';
 
 export class PaymentTypeController {

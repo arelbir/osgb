@@ -72,4 +72,31 @@ router.get('/', asyncHandler(PaymentTypeController.getAll));
  */
 router.post('/', asyncHandler(PaymentTypeController.create));
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     PaymentType:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Ödeme tipi ID
+ *         name:
+ *           type: string
+ *           enum: ["nakit", "kredi kartı", "havale"]
+ *           description: Ödeme tipi ("nakit", "kredi kartı", "havale")
+ *         description:
+ *           type: string
+ *           description: Ödeme tipi açıklaması
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *           description: Ödeme tipi oluşturulma tarihi
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           description: Ödeme tipi güncellenme tarihi
+ */
+
 export default router;

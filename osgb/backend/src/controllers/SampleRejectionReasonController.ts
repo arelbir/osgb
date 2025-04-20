@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import AppDataSource from '../../ormconfig';
+import { AppDataSource } from '../ormconfig';
 import { SampleRejectionReason } from '../models/SampleRejectionReason';
 
 export class SampleRejectionReasonController {

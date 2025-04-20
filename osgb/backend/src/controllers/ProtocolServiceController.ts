@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import AppDataSource from '../../ormconfig';
+import { AppDataSource } from '../ormconfig';
 import { ProtocolService } from '../models/ProtocolService';
 
 export class ProtocolServiceController {

@@ -5,6 +5,7 @@ import { Company } from './Company';
 import { User } from './User';
 import { ProtocolService } from './ProtocolService';
 import { Payment } from './Payment';
+import { ProtocolStatus } from '../enums/ProtocolStatus';
 
 @Entity('protocols')
 export class Protocol {
@@ -53,8 +54,8 @@ export class Protocol {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   paid_amount: number;
 
-  @Column({ nullable: true })
-  status: string;
+  @Column({ nullable: true, type: 'enum', enum: ProtocolStatus })
+  status: ProtocolStatus;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })

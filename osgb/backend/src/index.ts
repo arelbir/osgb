@@ -28,7 +28,12 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // Gerekirse buraya frontend domainini ekleyebilirsin (örn: ["http://localhost:3000"])
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Swagger docs

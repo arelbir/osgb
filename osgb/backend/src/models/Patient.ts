@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { Company } from './Company';
 import { CompanyUnit } from './CompanyUnit';
 import { Protocol } from './Protocol';
+import { Gender } from '../enums/Gender';
 
 @Entity('patients')
 export class Patient {
@@ -26,8 +27,8 @@ export class Patient {
   @Column({ type: 'date', nullable: true })
   birth_date: Date | null;
 
-  @Column()
-  gender: string;
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
 
   @Column({ nullable: true })
   mother_name: string;

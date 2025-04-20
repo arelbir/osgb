@@ -12,6 +12,10 @@ const options = {
     },
     servers: [
       {
+        url: 'http://185.92.2.52:5555/api',
+        description: 'Sunucu API',
+      },
+      {
         url: 'http://localhost:5000/api',
         description: 'Local API',
       },

@@ -7,6 +7,7 @@ import { Company } from '../models/Company';
 import { ProtocolService } from '../models/ProtocolService';
 import { Service } from '../models/Service';
 import { User } from '../models/User';
+import { ProtocolStatus } from '../enums/ProtocolStatus';
 
 export class ProtocolController {
   static async getAll(req: Request, res: Response): Promise<void> {
@@ -191,7 +192,7 @@ export class ProtocolController {
       protocol.total_amount = total_amount;
       protocol.discount_amount = discount_amount || 0;
       protocol.paid_amount = 0;
-      protocol.status = 'active';
+      protocol.status = ProtocolStatus.Pending;
       
       if (req.user) {
         const userRepository = AppDataSource.getRepository(User);

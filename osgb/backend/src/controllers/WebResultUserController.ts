@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import AppDataSource from '../../ormconfig';
+import { AppDataSource } from '../ormconfig';
 import { WebResultUser } from '../models/WebResultUser';
 
 export class WebResultUserController {

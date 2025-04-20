@@ -50,6 +50,8 @@ router.use(authMiddleware);
  *           format: float
  *         status:
  *           type: string
+ *           enum: ["pending", "completed", "cancelled"]
+ *           description: Protokol durumu ("pending", "completed", "cancelled")
  *         created_by:
  *           type: integer
  *         created_at:

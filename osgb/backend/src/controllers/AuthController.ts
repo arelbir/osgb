@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../config/database';
 import { User } from '../models/User';
+import { UserRole } from '../enums/UserRole';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -33,7 +34,7 @@ export class AuthController {
           id: user.id,
           username: user.username,
           full_name: user.full_name,
-          role: user.role
+          role: user.role as string
         },
         token
       });
@@ -65,14 +66,14 @@ export class AuthController {
       adminUser.password = hashedPassword;
       adminUser.full_name = full_name;
       adminUser.email = email;
-      adminUser.role = 'admin';
+      adminUser.role = UserRole.Admin;
       await userRepository.save(adminUser);
       res.status(201).json({
         id: adminUser.id,
         username: adminUser.username,
         full_name: adminUser.full_name,
         email: adminUser.email,
-        role: adminUser.role
+        role: adminUser.role as string
       });
       return;
     } catch (error) {
@@ -104,13 +105,13 @@ export class AuthController {
       user.password = hashedPassword;
       user.full_name = full_name;
       user.email = email;
-      user.role = role;
+      user.role = role as UserRole;
       await userRepository.save(user);
       res.status(201).json({
         id: user.id,
         username: user.username,
         full_name: user.full_name,
-        role: user.role
+        role: user.role as string
       });
       return;
     } catch (error) {
@@ -138,7 +139,7 @@ export class AuthController {
         username: user.username,
         full_name: user.full_name,
         email: user.email,
-        role: user.role
+        role: user.role as string
       });
       return;
     } catch (error) {

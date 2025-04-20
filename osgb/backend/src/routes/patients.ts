@@ -39,6 +39,8 @@ router.use(authMiddleware);
  *           format: date
  *         gender:
  *           type: string
+ *           enum: ["Erkek", "Kadın", "Diğer"]
+ *           description: Cinsiyet ("Erkek", "Kadın", "Diğer")
  *         mother_name:
  *           type: string
  *         father_name:
@@ -303,5 +305,72 @@ router.put('/:id', asyncHandler(PatientController.update));
  *         description: Hasta silindi
  */
 router.delete('/:id', checkRole(['admin']), asyncHandler(PatientController.delete));
+
+/**
+ * @swagger
+ * /patients/import-excel:
+ *   post:
+ *     summary: Excel ile toplu hasta aktarımı
+ *     tags: [Patients]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Aktarılan hasta sayısı ve örnek kayıtlar
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 imported:
+ *                   type: integer
+ *                 patients:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Patient'
+ */
+router.post('/import-excel', asyncHandler(PatientController.importExcel));
+
+/**
+ * @swagger
+ * /patients/excel-template:
+ *   get:
+ *     summary: Hasta Excel şablonunu indir
+ *     tags: [Patients]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Excel şablonu dosyası
+ *         content:
+ *           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+ *             schema:
+ *               type: string
+ *               format: binary
+ */
+router.get('/excel-template', (req, res) => {
+  try {
+    const filePath = require('path').resolve(__dirname, '../utils/excelPatientTemplate.xlsx');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename="hasta_sablon.xlsx"');
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        res.status(500).json({ message: 'Excel şablonu indirilemedi', error: err.message });
+      }
+    });
+  } catch (err: any) {
+    res.status(500).json({ message: 'Excel şablonu indirilemedi', error: err.message });
+  }
+});
 
 export default router;

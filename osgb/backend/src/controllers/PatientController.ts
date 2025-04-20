@@ -3,6 +3,11 @@ import { AppDataSource } from '../config/database';
 import { Patient } from '../models/Patient';
 import { Company } from '../models/Company';
 import { CompanyUnit } from '../models/CompanyUnit';
+import multer from 'multer';
+import XLSX from 'xlsx';
+import path from 'path';
+
+const upload = multer({ dest: 'uploads/' });
 
 export class PatientController {
   static async getAll(req: Request, res: Response): Promise<void> {
@@ -297,5 +302,55 @@ export class PatientController {
       res.status(500).json({ message: 'Internal server error' });
       return;
     }
+  }
+  
+  static async importExcel(req: Request, res: Response): Promise<void> {
+    // Multer ile dosya yakalama
+    const uploadSingle = upload.single('file');
+    uploadSingle(req, res, async function (err: any) {
+      if (err) {
+        res.status(400).json({ message: 'Dosya yüklenemedi' });
+        return;
+      }
+      if (!req.file) {
+        res.status(400).json({ message: 'Dosya bulunamadı' });
+        return;
+      }
+      try {
+        const filePath = (req.file as Express.Multer.File).path;
+        const workbook = XLSX.readFile(filePath);
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' }) as any[];
+        const patientRepository = AppDataSource.getRepository(Patient);
+        let imported = 0;
+        const importedPatients = [];
+        for (const row of rows) {
+          // Temel zorunlu alan kontrolü
+          if (!row.first_name || !row.last_name || !row.gender) continue;
+          const patient = patientRepository.create({
+            tc_identity_number: row.tc_identity_number,
+            registration_number: row.registration_number,
+            passport_number: row.passport_number,
+            first_name: row.first_name,
+            last_name: row.last_name,
+            birth_date: row.birth_date ? new Date(row.birth_date) : null,
+            gender: row.gender,
+            mother_name: row.mother_name,
+            father_name: row.father_name,
+            mobile_phone: row.mobile_phone,
+            home_phone: row.home_phone,
+            email: row.email,
+            address: row.address
+          });
+          await patientRepository.save(patient);
+          importedPatients.push(patient);
+          imported++;
+        }
+        res.json({ imported, patients: importedPatients.slice(0, 5) });
+      } catch (e) {
+        res.status(500).json({ message: 'Excel okuma/aktarımı sırasında hata oluştu' });
+      }
+    });
   }
 }

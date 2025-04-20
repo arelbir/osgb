@@ -35,7 +35,7 @@ const router = Router();
  *                 type: string
  *           example:
  *             username: "admin"
- *             password: "Admin123!"
+ *             password: "aa12345"
  *             full_name: "Admin Kullanıcı"
  *             email: "admin@arel.com"
  *     responses:
@@ -95,7 +95,7 @@ router.post('/init-admin', asyncHandler(AuthController.initAdmin));
  *                 type: string
  *           example:
  *             username: "admin"
- *             password: "Admin123!"
+ *             password: "aa12345"
  *     responses:
  *       200:
  *         description: Giriş başarılı, token döner
@@ -174,6 +174,8 @@ router.post('/login', asyncHandler(AuthController.login));
  *                 type: string
  *               role:
  *                 type: string
+ *                 enum: ["admin", "doctor", "user"]
+ *                 description: Kullanıcı rolü ("admin", "doctor", "user")
  *     responses:
  *       201:
  *         description: Kullanıcı oluşturuldu
